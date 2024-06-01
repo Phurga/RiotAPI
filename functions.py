@@ -1,4 +1,7 @@
-from globals import API_KEY, API_SOURCE
+import requests
+
+API_KEY = "RGAPI-bb2a5e0a-e86c-4ef5-ac02-15258ea56515"
+API_SOURCE = "https://europe.api.riotgames.com"
 
 def api_call(api_endpoint: str, arguments: str, api_key = API_KEY, api_source = API_SOURCE):
     if '?' in arguments:
@@ -6,8 +9,7 @@ def api_call(api_endpoint: str, arguments: str, api_key = API_KEY, api_source = 
     else:
         key_join = '?'
     api_url = f"{api_source}{api_endpoint}{arguments}{key_join}api_key={api_key}"
-    from requests import get
-    response = get(api_url)
+    response = requests.get(api_url)
     api_call.counter += 1 # I want to ensure I respect the API limits
     if response.ok:
         return response.json()
