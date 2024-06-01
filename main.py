@@ -1,4 +1,4 @@
-from functions import *
+from api_functions import *
 
 import time
 
@@ -13,3 +13,4 @@ gameEpochTime = match_info['info']['gameCreation']
 gameTime = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(gameEpochTime / 1000))
 
 print(gameTime)
+print(api_call.counter)
