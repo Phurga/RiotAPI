@@ -1,15 +1,14 @@
 import requests
 
 API_KEY = "RGAPI-bb2a5e0a-e86c-4ef5-ac02-15258ea56515"
+API_DICT = {"api_key" : API_KEY}
 API_SOURCE = "https://europe.api.riotgames.com"
+API_RATE_LIMIT_SECONDS = 20
+API_RATE_LIMITE_2MIN = 100
 
-def api_call(api_endpoint: str, arguments: str, api_key = API_KEY, api_source = API_SOURCE):
-    if '?' in arguments:
-        key_join = '&'
-    else:
-        key_join = '?'
-    api_url = f"{api_source}{api_endpoint}{arguments}{key_join}api_key={api_key}"
-    response = requests.get(api_url)
+def api_call(api_endpoint: str, params = API_DICT, api_source = API_SOURCE):
+    """ Some overhead over requests.get"""
+    response = requests.get(f"{api_source}{api_endpoint}", params=params)
     api_call.counter += 1 # I want to ensure I respect the API limits
     if response.ok:
         return response.json()
@@ -18,14 +17,12 @@ def api_call(api_endpoint: str, arguments: str, api_key = API_KEY, api_source = 
 api_call.counter = 0 # Initiliasing
 
 def get_puuid(gameName: str, tagLine: str):
-    return api_call(api_endpoint = "/riot/account/v1/accounts/by-riot-id/",
-                    arguments = '/'.join([gameName, tagLine]))['puuid']
+    return api_call(f"/riot/account/v1/accounts/by-riot-id/{gameName}/{tagLine}")['puuid']
 
-def get_last_matches(puuid):
-    arguments = f"{puuid}/ids?start=0&count=20"
-    return api_call(api_endpoint = "/lol/match/v5/matches/by-puuid/",
-                arguments = f"{puuid}/ids?start=0&count=20")
+def get_last_matches(puuid, start, count, queue):
+    params = {"start": start, "count": count, "queue": queue}
+    params.update(API_DICT)
+    return api_call(api_endpoint = f"/lol/match/v5/matches/by-puuid/{puuid}/ids", params=params)
 
 def get_match_info(match_id):
-    return api_call(api_endpoint = "/lol/match/v5/matches/",
-                    arguments = match_id)
+    return api_call(api_endpoint = f"/lol/match/v5/matches/{match_id}")
