@@ -38,7 +38,7 @@ def get_game_ids(my_gameName, my_tagLine):
         except IndexError:
             break
 
-    store_match_ids(game_id_list)
+    write_pkl(game_id_list, MATCH_IDS_PATH)
 
 if __name__ == '__main__':
     my_gameName = "Aram%20Bagarre"

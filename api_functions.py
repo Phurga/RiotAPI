@@ -1,15 +1,18 @@
 import requests
+from rate_limiter import rate_limiter, CALLS_LONG, CALLS_SHORT, PERIOD_LONG, PERIOD_SHORT
+
 
 API_KEY = "RGAPI-bb2a5e0a-e86c-4ef5-ac02-15258ea56515"
 API_DICT = {"api_key" : API_KEY}
 API_SOURCE = "https://europe.api.riotgames.com"
-API_RATE_LIMIT_SECONDS = 20
-API_RATE_LIMITE_2MIN = 100
 
+
+@rate_limiter(CALLS_LONG, PERIOD_LONG)
+@rate_limiter(CALLS_SHORT, PERIOD_SHORT)
 def api_call(api_endpoint: str, params = API_DICT, api_source = API_SOURCE):
     """ Some overhead over requests.get"""
     response = requests.get(f"{api_source}{api_endpoint}", params=params)
-    api_call.counter += 1 # I want to ensure I respect the API limits
+    api_call.counter += 1
     if response.ok:
         return response.json()
     else:
@@ -25,4 +28,9 @@ def get_last_matches(puuid, start, count, queue):
     return api_call(api_endpoint = f"/lol/match/v5/matches/by-puuid/{puuid}/ids", params=params)
 
 def get_match_info(match_id):
-    return api_call(api_endpoint = f"/lol/match/v5/matches/{match_id}")
+    try:
+        return api_call(api_endpoint = f"/lol/match/v5/matches/{match_id}")
+    except ValueError:
+        print(f"{match_id} has no data entry.")
+        return None
+
