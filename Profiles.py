@@ -18,3 +18,5 @@ class Profile:
 ADRIEN = Profile('Adrien', 'Aram%20Bagarre', 'EUW', 'ARAM')
 LEO = Profile('Leo', 'Nudibranchia', 'NUDI', 'ALL')
 GASPAR = Profile('Gaspar', 'iSpip', 'EUW', 'ALL')
+
+TOULEMOND = [ADRIEN, LEO, GASPAR]
