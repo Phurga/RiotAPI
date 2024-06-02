@@ -8,7 +8,6 @@ def get_game_ids(profile: Profiles.Profile) -> list[str]:
     """Gets all game ids for a given profile until the Riot base has no data."""
     game_ids = []
     loopCount = 0
-    list_len = -1
     while True:
         if profile.queue_code is None:
             response = get_last_matches(profile.puuid, start = loopCount * GAME_PER_CALL, count = GAME_PER_CALL)
