@@ -1,18 +1,22 @@
 from data_functions import read_pkl, MATCH_DATA_PATH, HIGHLIGHTS_PATH, RESULT_PATH, write_pkl
 import Profiles
+from perf_tracker import track_perf
 
 import pandas as pd
 import matplotlib.pyplot as plt
 import time
 
-def get_last_game_date(all_matches_data):
+def get_last_game_date(all_matches_data) -> tuple[str]:
+    """Gets the earliest and oldest dates in all available matches data."""
     def get_date(index):
         epochTime = next(iter(all_matches_data[index].values()))['info']['gameCreation']
         date = time.strftime("%Y-%m-%d", time.gmtime(epochTime / 1000))
         return date
     return get_date(-1), get_date(0)
 
-def get_champion_highlights(profile: Profiles.Profile):
+@track_perf
+def get_champion_highlights(profile: Profiles.Profile) -> pd.DataFrame:
+    """Creates a champion highlighs dataframe, that consolidates top results per champion over the available period."""
     all_matches_data = read_pkl(f"{MATCH_DATA_PATH}{profile.suffix}")
 
     champions_highlights = dict()

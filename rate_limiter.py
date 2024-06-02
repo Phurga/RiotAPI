@@ -2,12 +2,14 @@ import threading
 import time
 from functools import wraps
 
+# Limits from RIOT: 100 per 2min, 20 per seconds. Giving some buffer to avoid errors.
 CALLS_LONG = 95
 PERIOD_LONG = 120
 CALLS_SHORT = 18
 PERIOD_SHORT = 1
 
 def rate_limiter(calls, period):
+    """Retrieved from chatgpt, have no idea how it works, but it does work."""
     def decorator(func):
         lock = threading.Lock()
         times = []

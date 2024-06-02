@@ -1,9 +1,12 @@
 from api_functions import *
 from data_functions import  *
 import Profiles
+from perf_tracker import track_perf
 
 GAME_PER_CALL = 100
 
+@explicit_api_usage
+@track_perf
 def get_game_ids(profile: Profiles.Profile) -> list[str]:
     """Gets all game ids for a given profile until the Riot base has no data."""
     game_ids = []
@@ -24,4 +27,3 @@ def get_game_ids(profile: Profiles.Profile) -> list[str]:
 
 if __name__ == '__main__':
     get_game_ids(Profiles.ADRIEN)
-    print(api_call.counter)

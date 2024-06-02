@@ -30,5 +30,12 @@ def get_match_data(match_id):
     try:
         return api_call(api_endpoint = f"/lol/match/v5/matches/{match_id}")
     except ValueError:
-        print(f"Game {match_id} has no data entry.")
+        #print(f"Game {match_id} has no data entry.")
         raise ValueError
+
+def explicit_api_usage(func):
+    """Decorator to print api usage of api intensive functions"""
+    def wrapper(*args, **kwargs):
+        func(*args, **kwargs)
+        print(str(api_call.counter) + ' API calls done by ' + func.__name__)
+    return wrapper
