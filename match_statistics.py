@@ -26,17 +26,19 @@ def get_champion_highlights(profile: Profiles.Profile):
                 for key in max_challenges_stats:
                     if champions_highlights[champion_name][key] < player_data['challenges'][key]: 
                         champions_highlights[champion_name][key] = player_data['challenges'][key]
-                for key in boolean_stats:
-                    if player_data[key] is True:
-                        champions_highlights[champion_name][f'_{key}_gameCount'] += 1
-                        champions_highlights[champion_name][f'_{key}_trueCount'] += player_data[key] * 1
-                        champions_highlights[champion_name][f'{key}_rate'] = champions_highlights[champion_name][f'_{key}_trueCount'] / champions_highlights[champion_name][f'_{key}_gameCount']
-
-            else: # else needs for initialisating
                 for key in total_stats:
                     champions_highlights[champion_name][f'total_{key}'] += player_data[key]
-                champions_highlights.update({champion_name: {key: player_data[key] for key in max_stats}})
-                champions_highlights[champion_name].update({key: player_data['challenges'][key] for key in max_challenges_stats})
+                for key in boolean_stats:
+                    champions_highlights[champion_name][f'_{key}_gameCount'] += 1
+                    champions_highlights[champion_name][f'_{key}_trueCount'] += player_data[key] * 1
+                    champions_highlights[champion_name][f'{key}_rate'] = champions_highlights[champion_name][f'_{key}_trueCount'] / champions_highlights[champion_name][f'_{key}_gameCount']
+
+            else: # else needs for initialisating
+                champions_highlights.update({champion_name : {}})
+                for key in max_stats:
+                    champions_highlights[champion_name][key] = player_data[key]
+                for key in max_challenges_stats:
+                    champions_highlights[champion_name][key] = player_data['challenges'][key]
                 for key in total_stats:
                     champions_highlights[champion_name][f'total_{key}'] = player_data[key]
                 for key in boolean_stats:
@@ -62,4 +64,4 @@ def showPentas(highlights_data):
             print(champion + ': ' + str(data['total_pentaKills']))
 
 if __name__ == '__main__':
-    get_champion_highlights(Profiles.ADRIEN)
+    showPentas(get_champion_highlights(Profiles.ADRIEN))
