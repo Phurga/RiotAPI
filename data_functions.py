@@ -3,6 +3,7 @@ import json
 
 MATCH_IDS_PATH = 'data/data.pkl'
 MATCH_INFO_PATH = 'data/match_info.pkl'
+HIGHLIGHTS_PATH = 'data/highlights.pkl'
 
 def write_pkl(data, path):
     with open(path, 'wb') as f:
