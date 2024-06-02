@@ -1,47 +1,23 @@
 from api_functions import *
 from data_functions import  *
+import Profiles
 
-import time
+GAME_PER_CALL = 100
 
-def find_last_valid_match(my_matches):
-    match_info = None
-    n = 1
-    while match_info is None:
-        try:
-            my_last_match_id = my_matches[-n]
-            match_info = get_match_data(my_last_match_id)
-        except ValueError:
-            n += 1
-            print(n)
-            pass
-        # There can also be an Index error if there is no elements in my_matches. Handled in get_last_date.
-    return match_info
-
-def get_last_date(my_matches):
-    match_info = find_last_valid_match(my_matches)
-    gameEpochTime = match_info['info']['gameCreation']
-    gameTime = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(gameEpochTime / 1000))
-    print(f"{gameTime}")
-    return gameEpochTime
-
-def get_game_ids(gameName, tagLine):
-    my_puuid = get_puuid(gameName, tagLine)
-    game_id_list = []
-    game_per_call = 100
-    aram_queue_code = 450
-    indexErrorCount = 0
+def get_game_ids(profile: Profiles.Profile) -> list[str]:
+    """Gets all game ids for a given profile until the Riot base has no data."""
+    game_ids = []
     loopCount = 0
-    while indexErrorCount < 10:
+    list_len = -1
+    while list_len(game_ids) < len(game_ids): # If the game_ids list size does not increase anymore, no need to call the API anymore.
+        if profile.queue_code is None:
+            game_ids.extend(get_last_matches(profile.puuid, start = loopCount * GAME_PER_CALL, count = GAME_PER_CALL))
+        else:    
+            game_ids.extend(get_last_matches(profile.puuid, start = loopCount * GAME_PER_CALL, count = GAME_PER_CALL, queue = profile.queue_code))
         loopCount += 1
-        my_matches = get_last_matches(my_puuid, loopCount * game_per_call, game_per_call, aram_queue_code)
-        try:
-            get_last_date(my_matches)
-            game_id_list.extend(my_matches)
-        except IndexError:
-            indexErrorCount += 1
-            break
-    write_pkl(game_id_list, f"{MATCH_IDS_PATH}_{gameName}_{tagLine}")
+    write_pkl(game_ids, f"{MATCH_IDS_PATH}{profile.suffix}")
+    return game_ids
 
 if __name__ == '__main__':
-    get_game_ids("Aram%20Bagarre", "EUW")
+    get_game_ids(Profiles.ADRIEN)
     print(api_call.counter)
