@@ -2,7 +2,7 @@ import requests
 from rate_limiter import rate_limiter, CALLS_LONG, CALLS_SHORT, PERIOD_LONG, PERIOD_SHORT
 
 
-API_KEY = "RGAPI-bb2a5e0a-e86c-4ef5-ac02-15258ea56515"
+API_KEY = "RGAPI-768e624c-3fd5-4141-89cf-0ee1ea04b04c"
 API_DICT = {"api_key" : API_KEY}
 API_SOURCE = "https://europe.api.riotgames.com"
 
@@ -27,10 +27,9 @@ def get_last_matches(puuid, start, count, queue):
     params.update(API_DICT)
     return api_call(api_endpoint = f"/lol/match/v5/matches/by-puuid/{puuid}/ids", params=params)
 
-def get_match_info(match_id):
+def get_match_data(match_id):
     try:
         return api_call(api_endpoint = f"/lol/match/v5/matches/{match_id}")
     except ValueError:
         print(f"{match_id} has no data entry.")
         return None
-

@@ -1,6 +1,6 @@
-from data_functions import read_pkl, MATCH_INFO_PATH, HIGHLIGHTS_PATH, write_pkl
+from data_functions import read_pkl, MATCH_DATA_PATH, HIGHLIGHTS_PATH, write_pkl
 
-all_matches_data = read_pkl(MATCH_INFO_PATH)
+all_matches_data = read_pkl(MATCH_DATA_PATH)
 
 my_puuid = "X6eorlmrPyiYOP5tJ2eq7vBZistPMAnKA2-JKpBiRvlTSETpLb0bCxDso5H8vax78nCOzLElKaOvgg"
 

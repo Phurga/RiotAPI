@@ -1,20 +1,21 @@
 import pickle
 import json
 
-MATCH_IDS_PATH = 'data/data.pkl'
-MATCH_INFO_PATH = 'data/match_info.pkl'
-HIGHLIGHTS_PATH = 'data/highlights.pkl'
+MATCH_IDS_PATH = 'data/match_ids'
+MATCH_DATA_PATH = 'data/match_data'
+HIGHLIGHTS_PATH = 'data/highlights'
 
 def write_pkl(data, path):
-    with open(path, 'wb') as f:
+    """Path should not include the file extension"""
+    with open(path+'.pkl', 'wb') as f:
         pickle.dump(data, f)
     return
 
 def read_pkl(path):
-    with open(path, 'rb') as f:
+    with open(path+'.pkl', 'rb') as f:
         return pickle.load(f)
 
 def write_json(data, path):
-    with open(path, 'w') as f:
+    with open(path+'.json', 'w') as f:
         json.dump(data, f)
     return
