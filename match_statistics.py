@@ -63,10 +63,13 @@ def get_champion_highlights(profile: Profiles.Profile):
     # Showing info
     df = pd.DataFrame.from_dict(champions_highlights, orient='index')
     user = profile.suffix
-    gameCount = len(df)
+    gameCount = df['_win_gameCount'].sum()
     date_past, date_recent = get_last_game_date(all_matches_data)
     fig, axes = plt.subplots(nrows=2, ncols=2, figsize=(10,10))
-    df[df['total_pentaKills'] > 0]['total_pentaKills'].head(10).sort_values(ascending=False).plot(kind='bar', ax=axes[0,0], title="Total pentakills")
+    if df['pentaKills'].sum() > 0:
+        df[df['total_pentaKills'] > 0]['total_pentaKills'].head(10).sort_values(ascending=False).plot(kind='bar', ax=axes[0,0], title="Total pentakills")
+    else:
+        axes[0,0].annotate('No pentakills :/', (0.5, 0.5))
     df.nlargest(10,'teamDamagePercentage')['teamDamagePercentage'].sort_values(ascending=False).plot(kind='bar', ax=axes[0,1], title="Team Damage Percentage")
     df.nlargest(10,'skillshotsDodged')['skillshotsDodged'].sort_values(ascending=False).plot(kind='bar', ax=axes[1,0], title="Dodged skillshots")
     df['losses'] = df['_win_gameCount'] - df['_win_trueCount']
@@ -78,4 +81,6 @@ def get_champion_highlights(profile: Profiles.Profile):
     return champions_highlights
 
 if __name__ == '__main__':
+    get_champion_highlights(Profiles.ADRIEN)
     get_champion_highlights(Profiles.LEO)
+    get_champion_highlights(Profiles.GASPAR)

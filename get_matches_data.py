@@ -14,7 +14,7 @@ def get_matches_data(profile: Profiles.Profile):
             pass
 
     write_pkl(game_data, f'{MATCH_DATA_PATH}{profile.suffix}')
-    write_json(game_data, f'{MATCH_DATA_PATH}{profile.suffix}')
+    #write_json(game_data, f'{MATCH_DATA_PATH}{profile.suffix}') loong
     return game_data
 
 if __name__ == '__main__':
